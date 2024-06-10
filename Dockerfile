@@ -25,6 +25,4 @@ COPY --chown=api:api ./.env /api/.env
 COPY --chown=api:api ./app-entrypoint.sh /
 
 RUN chmod u+x /app-entrypoint.sh
-
-EXPOSE 8006
-CMD sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --config gunicorn_config.py --access-logfile - config.wsgi"
+ENTRYPOINT ["/app-entrypoint.sh"]
