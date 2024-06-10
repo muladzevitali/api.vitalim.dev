@@ -36,6 +36,7 @@ env = environ.Env(
     CSRF_TRUSTED_ORIGINS=(list, []),
     AUTHENTICATION_TOKEN_EXPIRES_AFTER_SECONDS=(int, 60 * 60 * 24 * 365),
     POSTGRES_HOST=(str, 'localhost'),
+    POSTGRES_PORT=(str, '5432'),
     POSTGRES_DB=(str, 'db'),
     POSTGRES_USER=(str, 'user'),
     POSTGRES_PASSWORD=(str, 'password'),
