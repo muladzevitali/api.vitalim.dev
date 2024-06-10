@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: app
+    build:
+      context: '.'
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    entrypoint: [ '/app-entrypoint.sh' ]
+    ports:
+      - "8006:8006"
+    volumes:
+      - .:/api
+      - ./certbot/conf/:/etc/letsencrypt/:ro
+    stop_grace_period: "3s"
+    tty: true
+
+  nginx:
+    build:
+      context: ./nginx
+      args:
+        NGINX_CONFIG_FILE: ${NGINX_CONFIG_FILE}
+    container_name: nginx
+    env_file:
+      - .env
+    depends_on:
+      - "app"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./static:/static/:ro
+      - ./certbot/www/:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/letsencrypt/:ro
+    restart: "on-failure"
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
