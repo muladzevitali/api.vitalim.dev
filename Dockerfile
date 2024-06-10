@@ -25,4 +25,3 @@ COPY --chown=api:api ./.env /api/.env
 COPY --chown=api:api ./app-entrypoint.sh /
 
 RUN chmod u+x /app-entrypoint.sh
-ENTRYPOINT ["/app-entrypoint.sh"]
