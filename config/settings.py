@@ -1,13 +1,13 @@
 from pathlib import Path
 
-from config.env import env
+from config.env import env, DeploymentEnvironment
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 DEBUG = env.bool('DJANGO_DEBUG')
-
+DEPLOYMENT_ENV = env('DEPLOYMENT_ENV')
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS')
 
 INSTALLED_APPS = [
@@ -86,7 +86,27 @@ TIME_ZONE = 'Asia/Tbilisi'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+if DeploymentEnvironment.from_value(DEPLOYMENT_ENV) == DeploymentEnvironment.PROD:
+    USE_X_FORWARDED_HOST = True
+    SECURE_PROXY_SSL_HEADER = ('X-FORWARDED-PROTO', 'https')
+    CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    STATIC_ROOT = BASE_DIR / 'static'
+    CORS_ORIGIN_ALLOW_ALL = False
+
+    CORS_ORIGIN_WHITELIST = (
+        'https://api.vitalim.dev',
+    )
+
+else:
+    STATIC_ROOT = BASE_DIR / 'static'
+    CORS_ORIGIN_ALLOW_ALL = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
