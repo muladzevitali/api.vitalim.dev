@@ -86,6 +86,7 @@ TIME_ZONE = 'Asia/Tbilisi'
 USE_I18N = True
 USE_TZ = True
 
+STATIC_URL = "static/"
 if DeploymentEnvironment.from_value(DEPLOYMENT_ENV) == DeploymentEnvironment.PROD:
     USE_X_FORWARDED_HOST = True
     SECURE_PROXY_SSL_HEADER = ('X-FORWARDED-PROTO', 'https')
