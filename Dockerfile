@@ -4,12 +4,13 @@ WORKDIR /api
 
 RUN apt-get update && apt-get install -y build-essential libpq-dev
 
-RUN useradd --create-home api
+RUN addgroup -S app && adduser -S app -G app
+
+ADD . /api
+
 RUN chown api:api -R  /tmp /api
 
 USER api
-
-COPY --chown=api:api ./requirements.txt /api
 
 ENV PYTHONUNBUFFERED="${PYTHONUNBUFFERED}" \
     PYTHONPATH="." \
