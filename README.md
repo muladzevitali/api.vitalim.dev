@@ -35,3 +35,8 @@ On top of location data distances between points are calculated through Google d
 ```
 
 ### Usage can be found [here](apps/location/README.md)
+```shell
+
+certbot certonly --force-renew -d api.vitalim.dev -d www.api.vitalim.dev
+
+```
